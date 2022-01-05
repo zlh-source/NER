@@ -11,7 +11,7 @@ The main requirements are:
 - transformers 3.5.1
 
 ## Dataset
-Download [CLUNER](https://www.cluebenchmarks.com/introduce.html) and put it under `./datasets./CLUENER`.
+Download [CLUNER](https://www.cluebenchmarks.com/introduce.html) and put it under `./datasets/CLUENER`.
 
 ## Usage
 * **Get pre-trained BERT model**
