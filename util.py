@@ -1,7 +1,18 @@
 import json
-import numpy as np
 import os
 from transformers import WEIGHTS_NAME,AdamW, get_linear_schedule_with_warmup
+import random
+import numpy as np
+import torch
+
+def seed_everything(seed=7):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 def get_entity_from_tag_seq(tag_seq,id2tag,text):
     '''
