@@ -120,7 +120,9 @@ def train(args):
     dev_dataloader=data_generator(args, dev_data,id2tag, tag2id,cache_path=os.path.join(args.dataset_path,"cache","dev"),random=False)
 
     train_model=NERModel(args,len(tag2id))
-    train_model.to(args.device)
+    if not args.cpu:
+        train_model=torch.nn.DataParallel(train_model,device_ids=args.cuda_id).to(args.device) #多卡训练
+
     optimizer,scheduler=get_optimizer(len(train_dataloader),args,train_model)
     log_path=os.path.join(output_path, 'log.txt')
 
@@ -163,7 +165,8 @@ def test(args,dataloader=None,model=None,id2tag=None):
         id2tag, tag2id = get_categories_map(categories)
         dataloader = data_generator(args, dev_data, id2tag, tag2id,cache_path=os.path.join(args.dataset_path,"cache","dev"),random=False)
         model = NERModel(args,len(tag2id))
-        model.to(args.device)
+        if not args.cpu:
+            model = torch.nn.DataParallel(model, device_ids=args.cuda_id).to(args.device)  # 多卡训练
         model.load_state_dict(torch.load(os.path.join(output_path, WEIGHTS_NAME)))
     model.eval()
     X, Y, Z = 1e-10, 1e-10, 1e-10
